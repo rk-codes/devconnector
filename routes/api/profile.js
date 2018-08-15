@@ -21,6 +21,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     Profile.findOne({user: req.user.id})
     .populate('user', ['name', 'avatar'])
     .then(profile => {
+        console.log(req.user.id, profile);
         if(!profile) {
             errors.noProfile = 'There is no profile for the user';
             return res.status(404).json(errors);
@@ -87,6 +88,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     }
 
     const profileFields = {};
+    profileFields.user = req.user.id;
     const profileBasicFields = ['handle', 'company', 'bio', 'location', 'status', 'githubusername'];
     const profileSocialFields = ['youtube', 'twitter', 'linkedin', 'facebook', 'instagram'];
     
